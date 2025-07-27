@@ -103,3 +103,43 @@ document.getElementById('registrarRestart').addEventListener('click', registrarN
 
 // Inicializar
 atualizarDashboard();
+
+// Formulário de outage
+document.getElementById('formOutage').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const input = document.getElementById('inputOutage').value.trim();
+
+  if (input) {
+    const dados = getStoredData();
+    dados.ultimoOutageTexto = input;
+    salvarDados(dados);
+    atualizarDashboard();
+    e.target.reset();
+    alert('Outage registrado com sucesso!');
+  }
+});
+
+// Formulário manual de restart
+document.getElementById('formRestartManual').addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const recordTempo = parseInt(document.getElementById('inputRecordTempo').value, 10);
+  const ultimoRestartInput = document.getElementById('inputUltimoRestart').value;
+  const recordRestarts = parseInt(document.getElementById('inputRecordRestarts').value, 10);
+
+  if (!ultimoRestartInput || isNaN(recordTempo) || isNaN(recordRestarts)) {
+    alert('Preencha todos os campos corretamente.');
+    return;
+  }
+
+  const dados = getStoredData();
+  dados.recordTempoSemRestartHoras = recordTempo;
+  dados.ultimoRestartTimestamp = new Date(ultimoRestartInput).toISOString();
+  dados.restartLog.push(dados.ultimoRestartTimestamp);
+  dados.recordRestartsDia = recordRestarts;
+
+  salvarDados(dados);
+  atualizarDashboard();
+  e.target.reset();
+  alert('Restart manual registrado com sucesso!');
+});
