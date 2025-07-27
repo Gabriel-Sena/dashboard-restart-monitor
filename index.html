@@ -10,18 +10,37 @@
   <div class="container">
     <h1>Dashboard de Aplicação</h1>
     <div class="card-grid">
+
       <div class="card">
-        <h2>Restarts Hoje</h2>
+        <h2>Tempo sem realizar o restart</h2>
+        <p id="tempoSemRestart" class="value">--</p>
+      </div>
+
+      <div class="card">
+        <h2>Record de tempo sem realizar o restart</h2>
+        <p id="recordTempoSemRestart" class="value">--</p>
+      </div>
+
+      <div class="card">
+        <h2>Último restart realizado em</h2>
+        <p id="ultimoRestart" class="value">--</p>
+      </div>
+
+      <div class="card">
+        <h2>Restarts realizados hoje</h2>
         <p id="restartsHoje" class="value">0</p>
       </div>
+
       <div class="card">
-        <h2>Máximo em um Dia</h2>
-        <p id="maxRestarts" class="value">0</p>
+        <h2>Record de restarts no mesmo dia</h2>
+        <p id="recordRestarts" class="value">0</p>
       </div>
+
       <div class="card">
-        <h2>Tempo Desde o Último Restart</h2>
-        <p id="tempoUltimo" class="value">--</p>
+        <h2>Último outage</h2>
+        <p id="ultimoOutage" class="value">--</p>
       </div>
+
     </div>
   </div>
   <script src="script.js"></script>
