@@ -1,3 +1,4 @@
+// Mapeia os elementos do DOM (HTML) que serão atualizados dinamicamente
 const DOM = {
   tempoSemRestart: document.getElementById('tempoSemRestart'),
   recordTempoSemRestart: document.getElementById('recordTempoSemRestart'),
@@ -7,28 +8,32 @@ const DOM = {
   ultimoOutage: document.getElementById('ultimoOutage'),
 };
 
-const STORAGE_KEY = 'dashboard_app';
+const STORAGE_KEY = 'dashboard_app'; // chave usada para armazenar os dados no localStorage
 
+// Recupera os dados do localStorage ou inicializa com valores padrão
 function getStoredData() {
   const data = localStorage.getItem(STORAGE_KEY);
   if (data) return JSON.parse(data);
 
+  // Valores padrão se não existir nada salvo ainda
   return {
-    ultimoRestartTimestamp: new Date().toISOString(),
+    ultimoRestartTimestamp: new Date().toISOString(), // timestamp atual
     recordTempoSemRestartHoras: 0,
-    restartLog: [], // lista de timestamps
+    restartLog: [], // lista de timestamps de restarts
     recordRestartsDia: 0,
     ultimoOutageTexto: 'Nenhum registrado.',
   };
 }
 
+// Salva os dados no localStorage como string JSON
 function salvarDados(dados) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
 }
 
-function calcularTempoDesde(ultimoRestart) {
+// Calcula tempo (horas e minutos) desde o último restart
+function calcularTempoDesde(timestampISO) {
   const now = new Date();
-  const last = new Date(ultimoRestart);
+  const last = new Date(timestampISO);
   const diffMs = now - last;
 
   const horas = Math.floor(diffMs / (1000 * 60 * 60));
@@ -36,6 +41,7 @@ function calcularTempoDesde(ultimoRestart) {
   return { texto: `${horas}h ${minutos}min`, horasTotais: horas };
 }
 
+// Formata a data no formato "dd/mm hh:mm" para exibição
 function formatarData(timestampISO) {
   const dt = new Date(timestampISO);
   return dt.toLocaleString('pt-BR', {
@@ -46,6 +52,7 @@ function formatarData(timestampISO) {
   });
 }
 
+// Conta quantos restarts ocorreram hoje com base na lista de logs
 function calcularRestartsHoje(restartLog) {
   const hoje = new Date();
   return restartLog.filter(ts => {
@@ -58,24 +65,27 @@ function calcularRestartsHoje(restartLog) {
   }).length;
 }
 
+// Atualiza os valores do dashboard com base nos dados atuais
 function atualizarDashboard() {
   const dados = getStoredData();
 
+  // Cálculo do tempo desde o último restart
   const { texto, horasTotais } = calcularTempoDesde(dados.ultimoRestartTimestamp);
 
+  // Quantidade de restarts realizados hoje
   const restartsHoje = calcularRestartsHoje(dados.restartLog);
 
-  // Atualiza recorde de tempo sem restart
+  // Atualiza o recorde de tempo sem restart, se for maior que o anterior
   if (horasTotais > dados.recordTempoSemRestartHoras) {
     dados.recordTempoSemRestartHoras = horasTotais;
   }
 
-  // Atualiza recorde de restarts no mesmo dia
+  // Atualiza o recorde de restarts no mesmo dia, se for maior
   if (restartsHoje > dados.recordRestartsDia) {
     dados.recordRestartsDia = restartsHoje;
   }
 
-  // Atualiza DOM
+  // Atualiza os elementos da interface com os valores atuais
   DOM.tempoSemRestart.textContent = texto;
   DOM.recordTempoSemRestart.textContent = `${dados.recordTempoSemRestartHoras}h`;
   DOM.ultimoRestart.textContent = formatarData(dados.ultimoRestartTimestamp);
@@ -83,28 +93,44 @@ function atualizarDashboard() {
   DOM.recordRestarts.textContent = dados.recordRestartsDia;
   DOM.ultimoOutage.textContent = dados.ultimoOutageTexto;
 
-  // Salva
+  // Salva novamente os dados atualizados
   salvarDados(dados);
 }
 
+// Função para registrar um novo restart com o timestamp atual
 function registrarNovoRestart() {
   const dados = getStoredData();
 
   const now = new Date().toISOString();
   dados.ultimoRestartTimestamp = now;
-  dados.restartLog.push(now);
+  dados.restartLog.push(now); // adiciona o novo restart no log
 
   salvarDados(dados);
   atualizarDashboard();
 }
 
-// Evento de clique
+// Exibe ou esconde modais (popups)
+function toggleModal(id, show = true) {
+  const modal = document.getElementById(id);
+  if (show) modal.classList.remove('hidden');
+  else modal.classList.add('hidden');
+}
+
+// Evento: botão para registrar restart automaticamente (timestamp atual)
 document.getElementById('registrarRestart').addEventListener('click', registrarNovoRestart);
 
-// Inicializar
-atualizarDashboard();
+// Evento: abrir modal de restart manual
+document.getElementById('abrirRestartManual').addEventListener('click', () => toggleModal('modalRestartManual'));
 
-// Formulário de outage
+// Evento: abrir modal de outage
+document.getElementById('abrirOutage').addEventListener('click', () => toggleModal('modalOutage'));
+
+// Evento: fechar modais ao clicar no "X"
+document.querySelectorAll('.close').forEach(btn =>
+  btn.addEventListener('click', () => toggleModal(btn.getAttribute('data-close'), false))
+);
+
+// Evento: formulário de outage (salva texto no localStorage)
 document.getElementById('formOutage').addEventListener('submit', (e) => {
   e.preventDefault();
   const input = document.getElementById('inputOutage').value.trim();
@@ -114,24 +140,28 @@ document.getElementById('formOutage').addEventListener('submit', (e) => {
     dados.ultimoOutageTexto = input;
     salvarDados(dados);
     atualizarDashboard();
-    e.target.reset();
+    e.target.reset(); // limpa o formulário
+    toggleModal('modalOutage', false);
     alert('Outage registrado com sucesso!');
   }
 });
 
-// Formulário manual de restart
+// Evento: formulário de restart manual (preenche dados específicos)
 document.getElementById('formRestartManual').addEventListener('submit', (e) => {
   e.preventDefault();
 
+  // Captura os valores dos inputs
   const recordTempo = parseInt(document.getElementById('inputRecordTempo').value, 10);
   const ultimoRestartInput = document.getElementById('inputUltimoRestart').value;
   const recordRestarts = parseInt(document.getElementById('inputRecordRestarts').value, 10);
 
+  // Validação simples
   if (!ultimoRestartInput || isNaN(recordTempo) || isNaN(recordRestarts)) {
     alert('Preencha todos os campos corretamente.');
     return;
   }
 
+  // Atualiza os dados salvos
   const dados = getStoredData();
   dados.recordTempoSemRestartHoras = recordTempo;
   dados.ultimoRestartTimestamp = new Date(ultimoRestartInput).toISOString();
@@ -141,29 +171,9 @@ document.getElementById('formRestartManual').addEventListener('submit', (e) => {
   salvarDados(dados);
   atualizarDashboard();
   e.target.reset();
+  toggleModal('modalRestartManual', false);
   alert('Restart manual registrado com sucesso!');
 });
 
-// Controle dos modais
-function toggleModal(id, show = true) {
-  const modal = document.getElementById(id);
-  if (show) modal.classList.remove('hidden');
-  else modal.classList.add('hidden');
-}
-
-// Abrir modais
-document.getElementById('abrirRestartManual').addEventListener('click', () => {
-  toggleModal('modalRestartManual', true);
-});
-
-document.getElementById('abrirOutage').addEventListener('click', () => {
-  toggleModal('modalOutage', true);
-});
-
-// Fechar modais
-document.querySelectorAll('.close').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const targetId = btn.getAttribute('data-close');
-    toggleModal(targetId, false);
-  });
-});
+// Inicializa o dashboard ao carregar a página
+atualizarDashboard();
