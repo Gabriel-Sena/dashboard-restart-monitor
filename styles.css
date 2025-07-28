@@ -1,4 +1,3 @@
-/* Reset e fonte básica */
 body {
   font-family: Arial, sans-serif;
   background-color: #f2f4f8;
@@ -6,21 +5,18 @@ body {
   padding: 0;
 }
 
-/* Container central */
 .container {
   max-width: 800px;
   margin: 40px auto;
   padding: 20px;
 }
 
-/* Título */
 h1 {
   text-align: center;
   margin-bottom: 20px;
   color: #333;
 }
 
-/* Botões principais */
 .btn {
   display: block;
   margin: 10px auto;
@@ -37,7 +33,6 @@ h1 {
   background-color: #1e40af;
 }
 
-/* Grid de cards */
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -64,7 +59,7 @@ h1 {
   color: #222;
 }
 
-/* Modal (popup) */
+/* Modais */
 .modal {
   position: fixed;
   top: 0;
@@ -92,7 +87,6 @@ h1 {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-/* Botão de fechar (X) */
 .close {
   position: absolute;
   top: 12px;
@@ -106,7 +100,6 @@ h1 {
   color: #000;
 }
 
-/* Formulários */
 .form {
   display: flex;
   flex-direction: column;
@@ -127,7 +120,7 @@ h1 {
   border-radius: 4px;
 }
 
-/* Histórico de Outages */
+/* Histórico */
 .historico {
   max-width: 800px;
   margin: 40px auto 20px;

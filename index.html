@@ -10,38 +10,33 @@
   <div class="container">
     <h1>Dashboard de Aplicação</h1>
 
-    <!-- Botões principais -->
+    <!-- Botões -->
     <button id="registrarRestart" class="btn">Registrar novo restart (agora)</button>
     <button id="abrirRestartManual" class="btn">Registrar restart manual</button>
     <button id="abrirOutage" class="btn">Registrar outage</button>
 
-    <!-- Grid de cards com métricas -->
+    <!-- Grid de cards -->
     <div class="card-grid">
       <div class="card">
         <h2>Tempo sem realizar o restart</h2>
         <p id="tempoSemRestart" class="value">--</p>
       </div>
-
       <div class="card">
         <h2>Record de tempo sem realizar o restart</h2>
         <p id="recordTempoSemRestart" class="value">--</p>
       </div>
-
       <div class="card">
         <h2>Último restart realizado em</h2>
         <p id="ultimoRestart" class="value">--</p>
       </div>
-
       <div class="card">
         <h2>Restarts realizados hoje</h2>
         <p id="restartsHoje" class="value">0</p>
       </div>
-
       <div class="card">
         <h2>Record de restarts no mesmo dia</h2>
         <p id="recordRestarts" class="value">0</p>
       </div>
-
       <div class="card">
         <h2>Último outage</h2>
         <p id="ultimoOutage" class="value">--</p>
@@ -53,11 +48,11 @@
   <div class="historico">
     <h2>Histórico de Outages</h2>
     <div id="historicoOutages" class="historico-list">
-      <!-- Populado dinamicamente -->
+      <!-- Populado via JS -->
     </div>
   </div>
 
-  <!-- Modal: Restart Manual -->
+  <!-- Modal Restart Manual -->
   <div id="modalRestartManual" class="modal hidden">
     <div class="modal-content">
       <span class="close" data-close="modalRestartManual">&times;</span>
@@ -80,7 +75,7 @@
     </div>
   </div>
 
-  <!-- Modal: Outage -->
+  <!-- Modal Outage -->
   <div id="modalOutage" class="modal hidden">
     <div class="modal-content">
       <span class="close" data-close="modalOutage">&times;</span>
@@ -95,7 +90,6 @@
     </div>
   </div>
 
-  <!-- Script principal -->
   <script src="script.js"></script>
 </body>
 </html>
