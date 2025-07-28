@@ -99,7 +99,7 @@ function renderizarHistoricoOutages(logs) {
     const item = document.createElement('div');
     item.className = 'outage-item';
     item.innerHTML = `
-      <strong>${new Date(outage.data).toLocaleString('pt-BR')}</strong><br />
+      <strong>${new Date(outage.data).toLocaleDateString('pt-BR')}</strong> <br />
       <span>${outage.descricao}</span>
     `;
     container.appendChild(item);
@@ -161,12 +161,24 @@ document.querySelectorAll('.close').forEach(btn =>
 document.getElementById('formOutage').addEventListener('submit', (e) => {
   e.preventDefault();
 
-  const input = document.getElementById('inputOutage').value.trim();
-  if (!input) return;
+  const inputDescricao = document.getElementById('inputOutage').value.trim();
+  const inputData = document.getElementById('inputOutageDate').value;
+
+  if (!inputDescricao || !inputData) {
+    alert('Preencha todos os campos.');
+    return;
+  }
 
   const dados = getStoredData();
-  dados.ultimoOutageTexto = input;
-  dados.outageLog.push({ data: new Date().toISOString(), descricao: input });
+
+  // Atualiza campo principal com o texto
+  dados.ultimoOutageTexto = inputDescricao;
+
+  // Adiciona ao histórico com data fornecida pelo usuário
+  dados.outageLog.push({
+    data: inputData,
+    descricao: inputDescricao,
+  });
 
   salvarDados(dados);
   atualizarDashboard();
@@ -174,6 +186,7 @@ document.getElementById('formOutage').addEventListener('submit', (e) => {
   toggleModal('modalOutage', false);
   alert('Outage registrado com sucesso!');
 });
+
 
 // Formulário: Restart manual
 document.getElementById('formRestartManual').addEventListener('submit', (e) => {
