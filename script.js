@@ -95,16 +95,20 @@ function renderizarHistoricoOutages(logs) {
     return;
   }
 
-  logs.slice().reverse().forEach(outage => {
+  // Ordenar por data DESC (mais recente primeiro)
+  const ordenados = logs.slice().sort((a, b) => new Date(b.data) - new Date(a.data));
+
+  ordenados.forEach(outage => {
     const item = document.createElement('div');
     item.className = 'outage-item';
     item.innerHTML = `
-      <strong>${new Date(outage.data).toLocaleDateString('pt-BR')}</strong> <br />
+      <strong>${new Date(outage.data).toLocaleDateString('pt-BR')}</strong><br />
       <span>${outage.descricao}</span>
     `;
     container.appendChild(item);
   });
 }
+
 
 function atualizarDashboard() {
   const dados = getStoredData();
