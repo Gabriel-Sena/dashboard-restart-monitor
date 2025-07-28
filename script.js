@@ -143,3 +143,27 @@ document.getElementById('formRestartManual').addEventListener('submit', (e) => {
   e.target.reset();
   alert('Restart manual registrado com sucesso!');
 });
+
+// Controle dos modais
+function toggleModal(id, show = true) {
+  const modal = document.getElementById(id);
+  if (show) modal.classList.remove('hidden');
+  else modal.classList.add('hidden');
+}
+
+// Abrir modais
+document.getElementById('abrirRestartManual').addEventListener('click', () => {
+  toggleModal('modalRestartManual', true);
+});
+
+document.getElementById('abrirOutage').addEventListener('click', () => {
+  toggleModal('modalOutage', true);
+});
+
+// Fechar modais
+document.querySelectorAll('.close').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const targetId = btn.getAttribute('data-close');
+    toggleModal(targetId, false);
+  });
+});

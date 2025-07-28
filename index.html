@@ -12,38 +12,52 @@
 
       <button id="registrarRestart" class="btn">Registrar novo restart</button>
 
-      <!-- Botão rápido -->
+      <!-- Botões -->
       <button id="registrarRestart" class="btn">
         Registrar novo restart (agora)
       </button>
+      <button id="abrirRestartManual" class="btn">
+        Registrar restart manual
+      </button>
+      <button id="abrirOutage" class="btn">Registrar outage</button>
 
-      <!-- Formulário manual para novo restart -->
-      <form id="formRestartManual" class="form">
-        <h3>Registrar restart manualmente</h3>
-        <label>
-          Recorde de tempo sem restart (h):
-          <input type="number" id="inputRecordTempo" min="0" required />
-        </label>
-        <label>
-          Data e hora do último restart:
-          <input type="datetime-local" id="inputUltimoRestart" required />
-        </label>
-        <label>
-          Recorde de restarts no mesmo dia:
-          <input type="number" id="inputRecordRestarts" min="0" required />
-        </label>
-        <button type="submit" class="btn">Salvar restart manual</button>
-      </form>
+      <!-- Modal de restart manual -->
+      <div id="modalRestartManual" class="modal hidden">
+        <div class="modal-content">
+          <span class="close" data-close="modalRestartManual">&times;</span>
+          <form id="formRestartManual" class="form">
+            <h3>Registrar restart manualmente</h3>
+            <label>
+              Recorde de tempo sem restart (h):
+              <input type="number" id="inputRecordTempo" min="0" required />
+            </label>
+            <label>
+              Data e hora do último restart:
+              <input type="datetime-local" id="inputUltimoRestart" required />
+            </label>
+            <label>
+              Recorde de restarts no mesmo dia:
+              <input type="number" id="inputRecordRestarts" min="0" required />
+            </label>
+            <button type="submit" class="btn">Salvar restart manual</button>
+          </form>
+        </div>
+      </div>
 
-      <!-- Formulário para outage -->
-      <form id="formOutage" class="form">
-        <h3>Registrar novo outage</h3>
-        <label>
-          Descrição do outage:
-          <input type="text" id="inputOutage" required />
-        </label>
-        <button type="submit" class="btn">Salvar outage</button>
-      </form>
+      <!-- Modal de outage -->
+      <div id="modalOutage" class="modal hidden">
+        <div class="modal-content">
+          <span class="close" data-close="modalOutage">&times;</span>
+          <form id="formOutage" class="form">
+            <h3>Registrar novo outage</h3>
+            <label>
+              Descrição do outage:
+              <input type="text" id="inputOutage" required />
+            </label>
+            <button type="submit" class="btn">Salvar outage</button>
+          </form>
+        </div>
+      </div>
 
       <div class="card-grid">
         <div class="card">
