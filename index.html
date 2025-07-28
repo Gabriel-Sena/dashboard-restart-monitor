@@ -1,96 +1,101 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard de Aplicação</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h1>Dashboard de Aplicação</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard de Aplicação</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Dashboard de Aplicação</h1>
 
-      <button id="registrarRestart" class="btn">Registrar novo restart</button>
+    <!-- Botões principais -->
+    <button id="registrarRestart" class="btn">Registrar novo restart (agora)</button>
+    <button id="abrirRestartManual" class="btn">Registrar restart manual</button>
+    <button id="abrirOutage" class="btn">Registrar outage</button>
 
-      <!-- Botões -->
-      <button id="registrarRestart" class="btn">
-        Registrar novo restart (agora)
-      </button>
-      <button id="abrirRestartManual" class="btn">
-        Registrar restart manual
-      </button>
-      <button id="abrirOutage" class="btn">Registrar outage</button>
-
-      <!-- Modal de restart manual -->
-      <div id="modalRestartManual" class="modal hidden">
-        <div class="modal-content">
-          <span class="close" data-close="modalRestartManual">&times;</span>
-          <form id="formRestartManual" class="form">
-            <h3>Registrar restart manualmente</h3>
-            <label>
-              Recorde de tempo sem restart (h):
-              <input type="number" id="inputRecordTempo" min="0" required />
-            </label>
-            <label>
-              Data e hora do último restart:
-              <input type="datetime-local" id="inputUltimoRestart" required />
-            </label>
-            <label>
-              Recorde de restarts no mesmo dia:
-              <input type="number" id="inputRecordRestarts" min="0" required />
-            </label>
-            <button type="submit" class="btn">Salvar restart manual</button>
-          </form>
-        </div>
+    <!-- Grid de cards com métricas -->
+    <div class="card-grid">
+      <div class="card">
+        <h2>Tempo sem realizar o restart</h2>
+        <p id="tempoSemRestart" class="value">--</p>
       </div>
 
-      <!-- Modal de outage -->
-      <div id="modalOutage" class="modal hidden">
-        <div class="modal-content">
-          <span class="close" data-close="modalOutage">&times;</span>
-          <form id="formOutage" class="form">
-            <h3>Registrar novo outage</h3>
-            <label>
-              Descrição do outage:
-              <input type="text" id="inputOutage" required />
-            </label>
-            <button type="submit" class="btn">Salvar outage</button>
-          </form>
-        </div>
+      <div class="card">
+        <h2>Record de tempo sem realizar o restart</h2>
+        <p id="recordTempoSemRestart" class="value">--</p>
       </div>
 
-      <div class="card-grid">
-        <div class="card">
-          <h2>Tempo sem realizar o restart</h2>
-          <p id="tempoSemRestart" class="value">--</p>
-        </div>
+      <div class="card">
+        <h2>Último restart realizado em</h2>
+        <p id="ultimoRestart" class="value">--</p>
+      </div>
 
-        <div class="card">
-          <h2>Record de tempo sem realizar o restart</h2>
-          <p id="recordTempoSemRestart" class="value">--</p>
-        </div>
+      <div class="card">
+        <h2>Restarts realizados hoje</h2>
+        <p id="restartsHoje" class="value">0</p>
+      </div>
 
-        <div class="card">
-          <h2>Último restart realizado em</h2>
-          <p id="ultimoRestart" class="value">--</p>
-        </div>
+      <div class="card">
+        <h2>Record de restarts no mesmo dia</h2>
+        <p id="recordRestarts" class="value">0</p>
+      </div>
 
-        <div class="card">
-          <h2>Restarts realizados hoje</h2>
-          <p id="restartsHoje" class="value">0</p>
-        </div>
-
-        <div class="card">
-          <h2>Record de restarts no mesmo dia</h2>
-          <p id="recordRestarts" class="value">0</p>
-        </div>
-
-        <div class="card">
-          <h2>Último outage</h2>
-          <p id="ultimoOutage" class="value">--</p>
-        </div>
+      <div class="card">
+        <h2>Último outage</h2>
+        <p id="ultimoOutage" class="value">--</p>
       </div>
     </div>
-    <script src="script.js"></script>
-  </body>
+  </div>
+
+  <!-- Histórico de outages -->
+  <div class="historico">
+    <h2>Histórico de Outages</h2>
+    <div id="historicoOutages" class="historico-list">
+      <!-- Populado dinamicamente -->
+    </div>
+  </div>
+
+  <!-- Modal: Restart Manual -->
+  <div id="modalRestartManual" class="modal hidden">
+    <div class="modal-content">
+      <span class="close" data-close="modalRestartManual">&times;</span>
+      <form id="formRestartManual" class="form">
+        <h3>Registrar restart manualmente</h3>
+        <label>
+          Recorde de tempo sem restart (h):
+          <input type="number" id="inputRecordTempo" min="0" required />
+        </label>
+        <label>
+          Data e hora do último restart:
+          <input type="datetime-local" id="inputUltimoRestart" required />
+        </label>
+        <label>
+          Recorde de restarts no mesmo dia:
+          <input type="number" id="inputRecordRestarts" min="0" required />
+        </label>
+        <button type="submit" class="btn">Salvar restart manual</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Outage -->
+  <div id="modalOutage" class="modal hidden">
+    <div class="modal-content">
+      <span class="close" data-close="modalOutage">&times;</span>
+      <form id="formOutage" class="form">
+        <h3>Registrar novo outage</h3>
+        <label>
+          Descrição do outage:
+          <input type="text" id="inputOutage" required />
+        </label>
+        <button type="submit" class="btn">Salvar outage</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Script principal -->
+  <script src="script.js"></script>
+</body>
 </html>

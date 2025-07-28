@@ -1,3 +1,4 @@
+/* Reset e fonte básica */
 body {
   font-family: Arial, sans-serif;
   background-color: #f2f4f8;
@@ -5,21 +6,24 @@ body {
   padding: 0;
 }
 
+/* Container central */
 .container {
   max-width: 800px;
   margin: 40px auto;
   padding: 20px;
 }
 
+/* Título */
 h1 {
   text-align: center;
   margin-bottom: 20px;
   color: #333;
 }
 
+/* Botões principais */
 .btn {
   display: block;
-  margin: 0 auto 30px;
+  margin: 10px auto;
   padding: 10px 20px;
   background-color: #2563eb;
   color: white;
@@ -33,6 +37,7 @@ h1 {
   background-color: #1e40af;
 }
 
+/* Grid de cards */
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -59,37 +64,7 @@ h1 {
   color: #222;
 }
 
-.form {
-  background-color: #fff;
-  padding: 20px;
-  margin: 20px auto;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-}
-
-.form h3 {
-  margin-bottom: 16px;
-  color: #333;
-}
-
-.form label {
-  display: block;
-  margin-bottom: 12px;
-  font-size: 14px;
-  color: #333;
-}
-
-.form input {
-  width: 100%;
-  padding: 8px;
-  margin-top: 4px;
-  margin-bottom: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-/* Modal básico */
+/* Modal (popup) */
 .modal {
   position: fixed;
   top: 0;
@@ -129,4 +104,61 @@ h1 {
 
 .close:hover {
   color: #000;
+}
+
+/* Formulários */
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form label {
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #333;
+}
+
+.form input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Histórico de Outages */
+.historico {
+  max-width: 800px;
+  margin: 40px auto 20px;
+  padding: 0 20px;
+}
+
+.historico h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.historico-list {
+  background-color: #fff;
+  border-radius: 6px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.outage-item {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.outage-item:last-child {
+  border-bottom: none;
+}
+
+.empty {
+  color: #666;
+  font-style: italic;
 }
