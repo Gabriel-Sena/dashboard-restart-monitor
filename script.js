@@ -1,13 +1,13 @@
 const DOM = {
-  tempoSemRestart: document.getElementById('tempoSemRestart'),
-  recordTempoSemRestart: document.getElementById('recordTempoSemRestart'),
-  ultimoRestart: document.getElementById('ultimoRestart'),
-  restartsHoje: document.getElementById('restartsHoje'),
-  recordRestarts: document.getElementById('recordRestarts'),
-  ultimoOutage: document.getElementById('ultimoOutage'),
+  tempoSemRestart: document.getElementById("tempoSemRestart"),
+  recordTempoSemRestart: document.getElementById("recordTempoSemRestart"),
+  ultimoRestart: document.getElementById("ultimoRestart"),
+  restartsHoje: document.getElementById("restartsHoje"),
+  recordRestarts: document.getElementById("recordRestarts"),
+  ultimoOutage: document.getElementById("ultimoOutage"),
 };
 
-const STORAGE_KEY = 'dashboard_app';
+const STORAGE_KEY = "dashboard_app";
 
 // Garante que todos os campos existem (mesmo após atualizações)
 function getStoredData() {
@@ -18,7 +18,7 @@ function getStoredData() {
       recordTempoSemRestartHoras: 0,
       restartLog: [],
       recordRestartsDia: 0,
-      ultimoOutageTexto: 'Nenhum registrado.',
+      ultimoOutageTexto: "Nenhum registrado.",
       outageLog: [],
     };
   }
@@ -47,7 +47,7 @@ function formatarTempo(horasTotais, minutos = 0) {
 
   const meses = Math.floor(dias / 30);
   const diasRestantes = dias % 30;
-  return `${meses} ${meses === 1 ? 'mês' : 'meses'} ${diasRestantes} dias`;
+  return `${meses} ${meses === 1 ? "mês" : "meses"} ${diasRestantes} dias`;
 }
 
 function calcularTempoDesde(timestampISO) {
@@ -66,17 +66,17 @@ function calcularTempoDesde(timestampISO) {
 
 function formatarData(timestampISO) {
   const dt = new Date(timestampISO);
-  return dt.toLocaleString('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
+  return dt.toLocaleString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 }
 
 function calcularRestartsHoje(restartLog) {
   const hoje = new Date();
-  return restartLog.filter(ts => {
+  return restartLog.filter((ts) => {
     const data = new Date(ts);
     return (
       data.getDate() === hoje.getDate() &&
@@ -87,8 +87,8 @@ function calcularRestartsHoje(restartLog) {
 }
 
 function renderizarHistoricoOutages(logs) {
-  const container = document.getElementById('historicoOutages');
-  container.innerHTML = '';
+  const container = document.getElementById("historicoOutages");
+  container.innerHTML = "";
 
   if (!logs || logs.length === 0) {
     container.innerHTML = '<p class="empty">Nenhum outage registrado.</p>';
@@ -96,24 +96,29 @@ function renderizarHistoricoOutages(logs) {
   }
 
   // Ordenar por data DESC (mais recente primeiro)
-  const ordenados = logs.slice().sort((a, b) => new Date(b.data) - new Date(a.data));
+  const ordenados = logs
+    .slice()
+    .sort((a, b) => new Date(b.data) - new Date(a.data));
 
-  ordenados.forEach(outage => {
-    const item = document.createElement('div');
-    item.className = 'outage-item';
+  ordenados.forEach((outage) => {
+    const item = document.createElement("div");
+    item.className = "outage-item";
     item.innerHTML = `
-      <strong>${new Date(outage.data).toLocaleDateString('pt-BR')}</strong><br />
+      <strong>${new Date(outage.data).toLocaleDateString(
+        "pt-BR"
+      )}</strong><br />
       <span>${outage.descricao}</span>
     `;
     container.appendChild(item);
   });
 }
 
-
 function atualizarDashboard() {
   const dados = getStoredData();
 
-  const { texto, horasTotais } = calcularTempoDesde(dados.ultimoRestartTimestamp);
+  const { texto, horasTotais } = calcularTempoDesde(
+    dados.ultimoRestartTimestamp
+  );
   const restartsHoje = calcularRestartsHoje(dados.restartLog);
 
   if (horasTotais > dados.recordTempoSemRestartHoras) {
@@ -125,7 +130,9 @@ function atualizarDashboard() {
   }
 
   DOM.tempoSemRestart.textContent = texto;
-  DOM.recordTempoSemRestart.textContent = formatarTempo(dados.recordTempoSemRestartHoras);
+  DOM.recordTempoSemRestart.textContent = formatarTempo(
+    dados.recordTempoSemRestartHoras
+  );
   DOM.ultimoRestart.textContent = formatarData(dados.ultimoRestartTimestamp);
   DOM.restartsHoje.textContent = restartsHoje;
   DOM.recordRestarts.textContent = dados.recordRestartsDia;
@@ -149,27 +156,37 @@ function registrarNovoRestart() {
 
 function toggleModal(id, show = true) {
   const modal = document.getElementById(id);
-  if (show) modal.classList.remove('hidden');
-  else modal.classList.add('hidden');
+  if (show) modal.classList.remove("hidden");
+  else modal.classList.add("hidden");
 }
 
 // Eventos
-document.getElementById('registrarRestart').addEventListener('click', registrarNovoRestart);
-document.getElementById('abrirRestartManual').addEventListener('click', () => toggleModal('modalRestartManual'));
-document.getElementById('abrirOutage').addEventListener('click', () => toggleModal('modalOutage'));
-document.querySelectorAll('.close').forEach(btn =>
-  btn.addEventListener('click', () => toggleModal(btn.getAttribute('data-close'), false))
-);
+document
+  .getElementById("registrarRestart")
+  .addEventListener("click", registrarNovoRestart);
+document
+  .getElementById("abrirRestartManual")
+  .addEventListener("click", () => toggleModal("modalRestartManual"));
+document
+  .getElementById("abrirOutage")
+  .addEventListener("click", () => toggleModal("modalOutage"));
+document
+  .querySelectorAll(".close")
+  .forEach((btn) =>
+    btn.addEventListener("click", () =>
+      toggleModal(btn.getAttribute("data-close"), false)
+    )
+  );
 
 // Formulário: Outage
-document.getElementById('formOutage').addEventListener('submit', (e) => {
+document.getElementById("formOutage").addEventListener("submit", (e) => {
   e.preventDefault();
 
-  const inputDescricao = document.getElementById('inputOutage').value.trim();
-  const inputData = document.getElementById('inputOutageDate').value;
+  const inputDescricao = document.getElementById("inputOutage").value.trim();
+  const inputData = document.getElementById("inputOutageDate").value;
 
   if (!inputDescricao || !inputData) {
-    alert('Preencha todos os campos.');
+    alert("Preencha todos os campos.");
     return;
   }
 
@@ -187,26 +204,36 @@ document.getElementById('formOutage').addEventListener('submit', (e) => {
   salvarDados(dados);
   atualizarDashboard();
   e.target.reset();
-  toggleModal('modalOutage', false);
-  alert('Outage registrado com sucesso!');
+  toggleModal("modalOutage", false);
+  alert("Outage registrado com sucesso!");
 });
 
-
 // Formulário: Restart manual
-document.getElementById('formRestartManual').addEventListener('submit', (e) => {
+document.getElementById("formRestartManual").addEventListener("submit", (e) => {
   e.preventDefault();
 
-  const recordTempo = parseInt(document.getElementById('inputRecordTempo').value, 10);
-  const ultimoRestartInput = document.getElementById('inputUltimoRestart').value;
-  const recordRestarts = parseInt(document.getElementById('inputRecordRestarts').value, 10);
+  // Pega o valor informado em dias
+  const recordDias = parseInt(
+    document.getElementById("inputRecordTempo").value,
+    10
+  );
+  const ultimoRestartInput =
+    document.getElementById("inputUltimoRestart").value;
+  const recordRestarts = parseInt(
+    document.getElementById("inputRecordRestarts").value,
+    10
+  );
 
-  if (!ultimoRestartInput || isNaN(recordTempo) || isNaN(recordRestarts)) {
-    alert('Preencha todos os campos corretamente.');
+  if (!ultimoRestartInput || isNaN(recordDias) || isNaN(recordRestarts)) {
+    alert("Preencha todos os campos corretamente.");
     return;
   }
 
+  // Converte dias para horas
+  const recordHoras = recordDias * 24;
+
   const dados = getStoredData();
-  dados.recordTempoSemRestartHoras = recordTempo;
+  dados.recordTempoSemRestartHoras = recordHoras;
   dados.ultimoRestartTimestamp = new Date(ultimoRestartInput).toISOString();
   dados.restartLog.push(dados.ultimoRestartTimestamp);
   dados.recordRestartsDia = recordRestarts;
@@ -214,8 +241,8 @@ document.getElementById('formRestartManual').addEventListener('submit', (e) => {
   salvarDados(dados);
   atualizarDashboard();
   e.target.reset();
-  toggleModal('modalRestartManual', false);
-  alert('Restart manual registrado com sucesso!');
+  toggleModal("modalRestartManual", false);
+  alert("Restart manual registrado com sucesso!");
 });
 
 // Inicialização
