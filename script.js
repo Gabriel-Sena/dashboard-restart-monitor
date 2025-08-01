@@ -212,7 +212,7 @@ document.getElementById("formOutage").addEventListener("submit", (e) => {
 document.getElementById("formRestartManual").addEventListener("submit", (e) => {
   e.preventDefault();
 
-  // Pega o valor informado em dias
+  // Pega o valor informado em dias e converte
   const recordDias = parseInt(
     document.getElementById("inputRecordTempo").value,
     10
@@ -236,7 +236,11 @@ document.getElementById("formRestartManual").addEventListener("submit", (e) => {
   dados.recordTempoSemRestartHoras = recordHoras;
   dados.ultimoRestartTimestamp = new Date(ultimoRestartInput).toISOString();
   dados.restartLog.push(dados.ultimoRestartTimestamp);
-  dados.recordRestartsDia = recordRestarts;
+  
+  // Só atualiza se for maior que o atual
+  if (recordRestarts > dados.recordRestartsDia) {
+    dados.recordRestartsDia = recordRestarts;
+  }
 
   salvarDados(dados);
   atualizarDashboard();
