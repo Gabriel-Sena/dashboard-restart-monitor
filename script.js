@@ -233,10 +233,14 @@ document.getElementById("formRestartManual").addEventListener("submit", (e) => {
   const recordHoras = recordDias * 24;
 
   const dados = getStoredData();
-  dados.recordTempoSemRestartHoras = recordHoras;
   dados.ultimoRestartTimestamp = new Date(ultimoRestartInput).toISOString();
   dados.restartLog.push(dados.ultimoRestartTimestamp);
   
+  // Atualiza recorde de tempo somente se for maior
+  if (recordHoras > dados.recordTempoSemRestartHoras) {
+    dados.recordTempoSemRestartHoras = recordHoras;
+  }
+
   // Só atualiza se for maior que o atual
   if (recordRestarts > dados.recordRestartsDia) {
     dados.recordRestartsDia = recordRestarts;
