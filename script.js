@@ -95,6 +95,11 @@ function renderizarHistoricoOutages(logs) {
     return;
   }
 
+  function formatarDataPtBr(dateStr) {
+    const [year, month, day] = dateStr.split("-");
+    return `${day}/${month}/${year}`;
+  }
+
   // Ordenar por data DESC (mais recente primeiro)
   const ordenados = logs
     .slice()
@@ -104,9 +109,7 @@ function renderizarHistoricoOutages(logs) {
     const item = document.createElement("div");
     item.className = "outage-item";
     item.innerHTML = `
-      <strong>${new Date(outage.data).toLocaleDateString(
-        "pt-BR"
-      )}</strong><br />
+      <strong>${formatarDataPtBr(outage.data)}</strong><br />
       <span>${outage.descricao}</span>
     `;
     container.appendChild(item);
@@ -137,14 +140,13 @@ function atualizarDashboard() {
   DOM.restartsHoje.textContent = restartsHoje;
   DOM.recordRestarts.textContent = dados.recordRestartsDia;
   if (dados.outageLog.length > 0) {
-  const outageMaisRecente = dados.outageLog.reduce((maisRecente, atual) =>
-    new Date(atual.data) > new Date(maisRecente.data) ? atual : maisRecente
-  );
-  DOM.ultimoOutage.textContent = outageMaisRecente.descricao;
-} else {
-  DOM.ultimoOutage.textContent = 'Nenhum registrado.';
-}
-
+    const outageMaisRecente = dados.outageLog.reduce((maisRecente, atual) =>
+      new Date(atual.data) > new Date(maisRecente.data) ? atual : maisRecente
+    );
+    DOM.ultimoOutage.textContent = outageMaisRecente.descricao;
+  } else {
+    DOM.ultimoOutage.textContent = "Nenhum registrado.";
+  }
 
   renderizarHistoricoOutages(dados.outageLog);
 
@@ -243,7 +245,7 @@ document.getElementById("formRestartManual").addEventListener("submit", (e) => {
   const dados = getStoredData();
   dados.ultimoRestartTimestamp = new Date(ultimoRestartInput).toISOString();
   dados.restartLog.push(dados.ultimoRestartTimestamp);
-  
+
   // Atualiza recorde de tempo somente se for maior
   if (recordHoras > dados.recordTempoSemRestartHoras) {
     dados.recordTempoSemRestartHoras = recordHoras;
