@@ -136,7 +136,15 @@ function atualizarDashboard() {
   DOM.ultimoRestart.textContent = formatarData(dados.ultimoRestartTimestamp);
   DOM.restartsHoje.textContent = restartsHoje;
   DOM.recordRestarts.textContent = dados.recordRestartsDia;
-  DOM.ultimoOutage.textContent = dados.ultimoOutageTexto;
+  if (dados.outageLog.length > 0) {
+  const outageMaisRecente = dados.outageLog.reduce((maisRecente, atual) =>
+    new Date(atual.data) > new Date(maisRecente.data) ? atual : maisRecente
+  );
+  DOM.ultimoOutage.textContent = outageMaisRecente.descricao;
+} else {
+  DOM.ultimoOutage.textContent = 'Nenhum registrado.';
+}
+
 
   renderizarHistoricoOutages(dados.outageLog);
 
